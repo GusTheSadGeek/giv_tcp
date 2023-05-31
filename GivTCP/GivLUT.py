@@ -48,16 +48,31 @@ class GivLUT:
     logger = logging.getLogger()
     logger.addHandler(fh)
     print("=====yy======================" + str(os.getenv("LOG_LEVEL")) + " ========================= ")
-    if str(os.getenv("LOG_LEVEL")).lower()=="debug":
-        logger.setLevel(logging.DEBUG)
-    elif str(os.getenv("LOG_LEVEL")).lower()=="info":
-        logger.setLevel(logging.INFO)
-    elif str(os.getenv("LOG_LEVEL")).lower()=="critical":
-        logger.setLevel(logging.CRITICAL)
-    elif str(os.getenv("LOG_LEVEL")).lower()=="warning":
-        logger.setLevel(logging.WARNING)
+    if os.getenv("LOG_LEVEL").lower() == "debug":
+        lvl = logging.DEBUG
+    elif os.getenv("LOG_LEVEL").lower() == "info":
+        lvl = logging.INFO
+    elif os.getenv("LOG_LEVEL").lower() == "critical":
+        lvl = logging.CRITICAL
+    elif os.getenv("LOG_LEVEL").lower() == "warning":
+        lvl = logging.WARNING
     else:
-        logger.setLevel(logging.ERROR)
+        lvl = logging.ERROR
+
+    logging.getLogger().setLevel(lvl)
+    logger.setLevel(lvl)
+
+
+    # if str(os.getenv("LOG_LEVEL")).lower()=="debug":
+    #     logger.setLevel(logging.DEBUG)
+    # elif str(os.getenv("LOG_LEVEL")).lower()=="info":
+    #     logger.setLevel(logging.INFO)
+    # elif str(os.getenv("LOG_LEVEL")).lower()=="critical":
+    #     logger.setLevel(logging.CRITICAL)
+    # elif str(os.getenv("LOG_LEVEL")).lower()=="warning":
+    #     logger.setLevel(logging.WARNING)
+    # else:
+    #     logger.setLevel(logging.ERROR)
 
     # File paths for use
     lockfile=".lockfile"
