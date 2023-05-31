@@ -12,9 +12,9 @@ gunicorn={}
 webDash={}
 rqWorker={}
 redis={}
-print("=AA==========================" + os.getenv("LOG_LEVEL").lower +" ========================= ")
+print("=AA==========================" + str(os.getenv("LOG_LEVEL").lower()) +" ========================= ")
 
-if os.getenv("LOG_LEVEL").lower=="debug":
+if os.getenv("LOG_LEVEL").lower()=="debug":
     lvl=logging.DEBUG
 elif os.getenv("LOG_LEVEL").lower()=="info":
     lvl=logging.INFO

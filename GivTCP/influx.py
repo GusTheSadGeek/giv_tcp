@@ -13,7 +13,7 @@ if GiV_Settings.Debug_File_Location!="":
     fh = TimedRotatingFileHandler(GiV_Settings.Debug_File_Location, when='D', interval=1, backupCount=7)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
-print("=xx==========================" + GiV_Settings.Log_Level.lower() +" ========================= ")
+print("=xx==========================" + str(GiV_Settings.Log_Level.lower()) +" ========================= ")
 if GiV_Settings.Log_Level.lower()=="debug":
     logger.setLevel(logging.DEBUG)
 elif GiV_Settings.Log_Level.lower()=="info":
