@@ -13,19 +13,22 @@ webDash={}
 rqWorker={}
 redis={}
 
+if os.getenv("LOG_LEVEL").lower=="debug":
+    lvl=logging.DEBUG
+elif os.getenv("LOG_LEVEL").lower()=="info":
+    lvl=logging.INFO
+elif os.getenv("LOG_LEVEL").lower()=="critical":
+    lvl=logging.CRITICAL
+elif os.getenv("LOG_LEVEL").lower()=="warning":
+    lvl=logging.WARNING
+else:
+    lvl=logging.ERROR
+
+logging.getLogger().setLevel(lvl)
+
 logger = logging.getLogger("startup")
 logging.basicConfig(format='%(asctime)s - %(name)s - [%(levelname)s] - %(message)s')
 
-if os.getenv("LOG_LEVEL").lower=="debug":
-    logger.setLevel(logging.DEBUG)
-elif os.getenv("LOG_LEVEL").lower()=="info":
-    logger.setLevel(logging.INFO)
-elif os.getenv("LOG_LEVEL").lower()=="critical":
-    logger.setLevel(logging.CRITICAL)
-elif os.getenv("LOG_LEVEL").lower()=="warning":
-    logger.setLevel(logging.WARNING)
-else:
-    logger.setLevel(logging.ERROR)
 
 # Check if config directory exists and creates it if not
 
