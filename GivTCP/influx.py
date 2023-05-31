@@ -3,6 +3,7 @@ from influxdb_client import InfluxDBClient, WriteApi, WriteOptions
 import logging
 from logging.handlers import TimedRotatingFileHandler
 from settings import GiV_Settings
+import datetime
 
 logger = logging.getLogger("GivTCP_Influx_"+str(GiV_Settings.givtcp_instance))
 logging.basicConfig(format='%(asctime)s - %(name)s - [%(levelname)s] - %(message)s')
@@ -23,6 +24,7 @@ elif GiV_Settings.Log_Level.lower()=="warning":
 else:
     logger.setLevel(logging.ERROR)
 
+lastInfluxBatteryUpdate = datetime.datetime.now()
 
 class GivInflux():
 
@@ -56,11 +58,39 @@ class GivInflux():
 
         logging.debug("Data sending to Influx is: "+ output_str[:-1])
         data1=GivInflux.line_protocol(SN,output_str[:-1])
-        
+        logging.info("Data sending to Influx is: "+ data1)
+
         _db_client = InfluxDBClient(url=GiV_Settings.influxURL, token=GiV_Settings.influxToken, org=GiV_Settings.influxOrg, debug=True)
         _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
         _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
         logging.info("Written to InfluxDB")
+
+        _write_api.close()
+        _db_client.close()
+        #if morethan 5 mins since last update...
+        global lastInfluxBatteryUpdate
+        since = datetime.datetime.now() - lastInfluxBatteryUpdate
+        if since.seconds() > 300:
+            SN.publish_batts(SN, data)
+            lastInfluxBatteryUpdate = datetime.datetime.now()
+
+    def publish_batts(SN,data):
+        _db_client = InfluxDBClient(url=GiV_Settings.influxURL, token=GiV_Settings.influxToken,
+                                    org=GiV_Settings.influxOrg, debug=True)
+
+        for battery_sn in data['Battery_Details']:
+            output_str = ""
+            battery = data['Battery_Details'][battery_sn]
+            for key in battery:
+                logging.debug("Creating battery detail string for InfluxDB")
+                output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
+
+            logging.debug("Data battery sending to Influx is: "+ output_str[:-1])
+            data1=GivInflux.line_protocol(SN,output_str[:-1])
+
+            _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
+            _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
+            logging.info("Written to InfluxDB")
 
         _write_api.close()
         _db_client.close()
