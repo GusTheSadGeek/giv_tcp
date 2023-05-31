@@ -25,6 +25,7 @@ elif os.getenv("LOG_LEVEL").lower()=="warning":
 else:
     lvl=logging.ERROR
 
+logging.basicConfig(level=lvl)
 logging.getLogger().setLevel(lvl)
 
 logger = logging.getLogger("startup")
