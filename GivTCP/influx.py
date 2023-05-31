@@ -4,6 +4,7 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from settings import GiV_Settings
 import datetime
+import os
 
 logger = logging.getLogger("GivTCP_Influx_"+str(GiV_Settings.givtcp_instance))
 logging.basicConfig(format='%(asctime)s - %(name)s - [%(levelname)s] - %(message)s')
@@ -24,7 +25,18 @@ elif GiV_Settings.Log_Level.lower()=="warning":
     logger.setLevel(logging.WARNING)
 else:
     logger.setLevel(logging.ERROR)
+if os.getenv("LOG_LEVEL").lower() == "debug":
+    lvl = logging.DEBUG
+elif os.getenv("LOG_LEVEL").lower() == "info":
+    lvl = logging.INFO
+elif os.getenv("LOG_LEVEL").lower() == "critical":
+    lvl = logging.CRITICAL
+elif os.getenv("LOG_LEVEL").lower() == "warning":
+    lvl = logging.WARNING
+else:
+    lvl = logging.ERROR
 
+logging.getLogger().setLevel(lvl)
 lastInfluxBatteryUpdate = datetime.datetime.now()
 
 class GivInflux():
