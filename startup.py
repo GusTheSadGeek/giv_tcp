@@ -30,7 +30,10 @@ logging.getLogger().setLevel(lvl)
 logger = logging.getLogger("startup")
 logging.basicConfig(format='%(asctime)s - %(name)s - [%(levelname)s] - %(message)s')
 
-
+logger.critical("CRIT")
+logger.error("ERROR")
+logger.info("INFO")
+logger.debug("DEBUG")
 # Check if config directory exists and creates it if not
 
 def palm_job():
