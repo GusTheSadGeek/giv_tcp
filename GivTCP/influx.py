@@ -71,7 +71,7 @@ class GivInflux():
         global lastInfluxBatteryUpdate
         since = datetime.datetime.now() - lastInfluxBatteryUpdate
         if since > datetime.timedelta(seconds=300):
-            SN.publish_batts(SN, data)
+            GivInflux.publish_batts(SN, data)
             lastInfluxBatteryUpdate = datetime.datetime.now()
 
     def publish_batts(SN,data):
