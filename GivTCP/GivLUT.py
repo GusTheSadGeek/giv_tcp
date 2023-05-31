@@ -47,6 +47,7 @@ class GivLUT:
     fh.setFormatter(formatter)
     logger = logging.getLogger()
     logger.addHandler(fh)
+    print("=====yy======================" + str(os.getenv("LOG_LEVEL")) + " ========================= ")
     if str(os.getenv("LOG_LEVEL")).lower()=="debug":
         logger.setLevel(logging.DEBUG)
     elif str(os.getenv("LOG_LEVEL")).lower()=="info":
