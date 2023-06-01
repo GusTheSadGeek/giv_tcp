@@ -44,6 +44,9 @@ class GivInflux():
     def line_protocol(SN,readings):
         return '{},tagKey={} {}'.format(SN,'GivReal', readings) 
 
+    def line_protocol_battery(SN,tag, readings):
+        return '{},tagKey={} {}'.format(SN,tag, readings)
+
     def make_influx_string(datastr):
         new_str=datastr.replace(" ","_")
         new_str=new_str.lower()
@@ -98,11 +101,13 @@ class GivInflux():
             for key in battery:
                 if str(key).lower() == "battery_usb_present":
                     continue
+                if str(key).lower() == "battery_serial_number":
+                    continue
                 logging.info(str(key))
                 output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
 
             logging.debug("Data battery sending to Influx is: "+ output_str[:-1])
-            data1=GivInflux.line_protocol(SN,output_str[:-1])
+            data1=GivInflux.line_protocol_battery(SN, battery_sn ,output_str[:-1])
             logging.info("Data sending to Influx is: "+ data1)
 
             _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
