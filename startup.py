@@ -24,7 +24,7 @@ elif os.getenv("LOG_LEVEL").lower()=="warning":
     lvl=logging.WARNING
 else:
     lvl=logging.ERROR
-
+logging.
 logging.basicConfig(level=lvl)
 logging.getLogger().setLevel(lvl)
 
