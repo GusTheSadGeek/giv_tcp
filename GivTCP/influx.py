@@ -103,7 +103,7 @@ class GivInflux():
                     continue
                 if str(key).lower() == "battery_serial_number":
                     continue
-                logging.info(str(key))
+                #logging.info(str(key))
                 output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
 
             logging.debug("Data battery sending to Influx is: "+ output_str[:-1])
