@@ -83,7 +83,7 @@ class GivInflux():
         #if morethan 5 mins since last update...
         global lastInfluxBatteryUpdate
         since = datetime.datetime.now() - lastInfluxBatteryUpdate
-        if since > datetime.timedelta(seconds=300):
+        if since > datetime.timedelta(seconds=60):
             GivInflux.publish_batts(SN, data)
             lastInfluxBatteryUpdate = datetime.datetime.now()
 
@@ -96,8 +96,9 @@ class GivInflux():
             output_str = ""
             battery = data['Battery_Details'][battery_sn]
             for key in battery:
-                if "usb" not in key:
-                    output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
+                if key == "battery_usb_present":
+                    continue
+                output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
 
             logging.debug("Data battery sending to Influx is: "+ output_str[:-1])
             data1=GivInflux.line_protocol(SN,output_str[:-1])
