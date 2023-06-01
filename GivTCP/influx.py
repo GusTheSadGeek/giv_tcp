@@ -96,8 +96,9 @@ class GivInflux():
             output_str = ""
             battery = data['Battery_Details'][battery_sn]
             for key in battery:
-                if key == "battery_usb_present":
+                if str(key) == "battery_usb_present":
                     continue
+                logging.info(str(key))
                 output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
 
             logging.debug("Data battery sending to Influx is: "+ output_str[:-1])
