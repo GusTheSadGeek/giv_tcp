@@ -42,10 +42,10 @@ lastInfluxBatteryUpdate = datetime.datetime.now()
 class GivInflux():
 
     def line_protocol(SN,readings):
-        return '{},tagKey={} {}'.format(SN,'GivReal', readings) 
+        return '{},inverter={} {}'.format(SN,'GivReal', readings)
 
     def line_protocol_battery(SN,tag, readings):
-        return '{},tagKey={} {}'.format(SN,tag, readings)
+        return '{},battery={} {}'.format(SN,tag, readings)
 
     def make_influx_string(datastr):
         new_str=datastr.replace(" ","_")
