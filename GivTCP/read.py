@@ -543,7 +543,7 @@ def getData(fullrefresh):  # Read from Invertor put in cache
                 batteries2[b.battery_serial_number] = battery
                 logger.debug("Battery "+str(b.battery_serial_number)+" added")
             else:
-                logger.error("Battery Object empty so skipping")
+                logger.debug("Battery Object empty so skipping")
 
         ######## Create multioutput and publish #########
         energy = {}

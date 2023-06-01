@@ -90,14 +90,14 @@ class GivInflux():
     def publish_batts(SN,data):
         logging.info("logging battery")
         _db_client = InfluxDBClient(url=GiV_Settings.influxURL, token=GiV_Settings.influxToken,
-                                    org=GiV_Settings.influxOrg, debug=True)
+                                    org=GiV_Settings.influxOrg, debug=False)
 
         for battery_sn in data['Battery_Details']:
             output_str = ""
             battery = data['Battery_Details'][battery_sn]
             for key in battery:
-                logging.debug("Creating battery detail string for InfluxDB")
-                output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
+                if "usb" not in key:
+                    output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(battery[key])+','
 
             logging.debug("Data battery sending to Influx is: "+ output_str[:-1])
             data1=GivInflux.line_protocol(SN,output_str[:-1])
