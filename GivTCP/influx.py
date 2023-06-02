@@ -82,22 +82,23 @@ class GivInflux():
             _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
             logging.info("Written to InfluxDB")
 
+            # if morethan 5 mins since last update...
+            global lastInfluxBatteryUpdate
+            since = datetime.datetime.now() - lastInfluxBatteryUpdate
+            if since > datetime.timedelta(seconds=300):
+                GivInflux.publish_batts(SN, data, _write_api )
+                lastInfluxBatteryUpdate = datetime.datetime.now()
+
             _write_api.close()
             _db_client.close()
         except:
             logging.error("FAILED to write data")
 
-        #if morethan 5 mins since last update...
-        global lastInfluxBatteryUpdate
-        since = datetime.datetime.now() - lastInfluxBatteryUpdate
-        if since > datetime.timedelta(seconds=300):
-            GivInflux.publish_batts(SN, data)
-            lastInfluxBatteryUpdate = datetime.datetime.now()
 
-    def publish_batts(SN,data):
+    def publish_batts(SN,data,_write_api ):
         logging.info("logging battery")
-        _db_client = InfluxDBClient(url=GiV_Settings.influxURL, token=GiV_Settings.influxToken,
-                                    org=GiV_Settings.influxOrg, debug=False)
+        # _db_client = InfluxDBClient(url=GiV_Settings.influxURL, token=GiV_Settings.influxToken,
+        #                             org=GiV_Settings.influxOrg, debug=False)
 
         for battery_sn in data['Battery_Details']:
             output_str = ""
@@ -115,12 +116,12 @@ class GivInflux():
             #logging.info("Data sending to Influx is: "+ data1)
 
             try:
-                _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
+                #_write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
                 _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
+                #_write_api.close()
                 logging.info("Written to InfluxDB")
             except:
                 logging.error("FAILED to write battery " + battery_sn )
 
 
-        _write_api.close()
-        _db_client.close()
+#        _db_client.close()
