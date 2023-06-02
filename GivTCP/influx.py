@@ -76,13 +76,17 @@ class GivInflux():
         data1=GivInflux.line_protocol(SN,output_str[:-1])
         #logging.info("Data sending to Influx is: "+ data1)
 
-        _db_client = InfluxDBClient(url=GiV_Settings.influxURL, token=GiV_Settings.influxToken, org=GiV_Settings.influxOrg, debug=False)
-        _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
-        _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
-        logging.info("Written to InfluxDB")
+        try:
+            _db_client = InfluxDBClient(url=GiV_Settings.influxURL, token=GiV_Settings.influxToken, org=GiV_Settings.influxOrg, debug=False)
+            _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
+            _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
+            logging.info("Written to InfluxDB")
 
-        _write_api.close()
-        _db_client.close()
+            _write_api.close()
+            _db_client.close()
+        except:
+            logging.error("FAILED to write data")
+
         #if morethan 5 mins since last update...
         global lastInfluxBatteryUpdate
         since = datetime.datetime.now() - lastInfluxBatteryUpdate
@@ -110,9 +114,13 @@ class GivInflux():
             data1=GivInflux.line_protocol_battery(SN, battery_sn ,output_str[:-1])
             #logging.info("Data sending to Influx is: "+ data1)
 
-            _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
-            _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
-            logging.info("Written to InfluxDB")
+            try:
+                _write_api = _db_client.write_api(write_options=WriteOptions(batch_size=1))
+                _write_api.write(bucket=GiV_Settings.influxBucket, record=data1)
+                logging.info("Written to InfluxDB")
+            except:
+                logging.error("FAILED to write battery " + battery_sn )
+
 
         _write_api.close()
         _db_client.close()
