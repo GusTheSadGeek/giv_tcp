@@ -85,7 +85,7 @@ class GivInflux():
             # if morethan 5 mins since last update...
             global lastInfluxBatteryUpdate
             since = datetime.datetime.now() - lastInfluxBatteryUpdate
-            if since > datetime.timedelta(seconds=300):
+            if since > datetime.timedelta(seconds=30):
                 GivInflux.publish_batts(SN, data, _write_api )
                 lastInfluxBatteryUpdate = datetime.datetime.now()
 
