@@ -685,6 +685,7 @@ def getCache():     # Get latest cache data and return it (for use in REST)
     with open(GivLUT.regcache, 'rb') as inp:
         regCacheStack = pickle.load(inp)
         multi_output = regCacheStack[4]
+    logger.error(multi_output)
     return multi_output
 
 def self_run2():
