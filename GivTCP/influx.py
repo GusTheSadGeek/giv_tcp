@@ -73,7 +73,7 @@ class GivInflux():
             output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(energy_total[key])+','
 
         raw = data['raw']['inverter']
-        logging.debug("Creating Energy/Total string for InfluxDB")
+        logging.debug("Creating raw string for InfluxDB")
         key = "temp_charger"
         output_str = output_str + str(GivInflux.make_influx_string(key)) + '=' + str(raw[key]) + ','
         key = "temp_inverter_heatsink"
