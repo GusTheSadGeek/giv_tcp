@@ -72,6 +72,13 @@ class GivInflux():
             logging.debug("Creating Energy/Total string for InfluxDB")
             output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(energy_total[key])+','
 
+        raw = data['raw']['inverter']
+        logging.debug("Creating Energy/Total string for InfluxDB")
+        key = "temp_charger"
+        output_str = output_str + str(GivInflux.make_influx_string(key)) + '=' + str(raw[key]) + ','
+        key = "temp_inverter_heatsink"
+        output_str = output_str + str(GivInflux.make_influx_string(key)) + '=' + str(raw[key]) + ','
+
         logging.debug("Data sending to Influx is: "+ output_str[:-1])
         data1=GivInflux.line_protocol(SN,output_str[:-1])
         #logging.info("Data sending to Influx is: "+ data1)
