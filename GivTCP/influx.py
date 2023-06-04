@@ -72,7 +72,7 @@ class GivInflux():
             logging.debug("Creating Energy/Total string for InfluxDB")
             output_str=output_str+str(GivInflux.make_influx_string(key))+'='+str(energy_total[key])+','
 
-        raw = data['raw']['inverter']
+        raw = data['raw']['invertor']
         logging.debug("Creating raw string for InfluxDB")
         key = "temp_charger"
         output_str = output_str + str(GivInflux.make_influx_string(key)) + '=' + str(raw[key]) + ','
